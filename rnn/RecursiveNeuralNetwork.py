@@ -14,7 +14,7 @@ def softmax(vector):
 
 
 class RecursiveNeuralNetwork(object):
-    def __init__(self, vector_len, classes=1, split_fn=half_split, node_fn=numpy.tanh, classification_fn=softmax):
+    def __init__(self, vector_len, classes, split_fn=half_split, node_fn=numpy.tanh, classification_fn=softmax):
         """
         vector_len: The length of the input vectors that will be classified
 
@@ -22,6 +22,7 @@ class RecursiveNeuralNetwork(object):
 
         split_fn: The function used to recursively branch the recursion tree
             Must take a list and return a two-tuple of lists
+            Guaranteed to be passed a list of length at least two, must return lists of at least length one
 
         node_fn:  The function used to normalize a tree node
             Must take a list and return a list of the same length
@@ -51,6 +52,6 @@ class RecursiveNeuralNetwork(object):
             left, right = self.split_fn(vector_list)
             return self.combine(self.recursive_evaluate(left), self.recursive_evaluate(right))
 
-    def classify(self, vector_list):
+    def predict(self, vector_list):
         output_vector = self.recursive_evaluate(vector_list)
         return self.classification_fn(numpy.dot(self.m_classify, output_vector))
